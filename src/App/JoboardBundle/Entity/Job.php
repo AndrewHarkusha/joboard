@@ -472,6 +472,7 @@ class Job
     {
         return $this->category;
     }
+
     /**
      * @ORM\PrePersist
      */
@@ -490,3 +491,4 @@ class Job
     {
         $this->updated_at = new \DateTime();
     }
+}
