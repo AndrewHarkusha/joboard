@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Category
 {
+
+    private $activeJobs;
     /**
      * @var integer
      */
@@ -36,6 +38,11 @@ class Category
     {
         $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->affiliates = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getName() ? $this->getName() : "";
     }
 
     /**
@@ -135,5 +142,15 @@ class Category
     public function getAffiliates()
     {
         return $this->affiliates;
+    }
+
+    public function setActiveJobs($jobs)
+    {
+        $this->activeJobs = $jobs;
+    }
+
+    public function getActiveJobs()
+    {
+        return $this->activeJobs;
     }
 }
