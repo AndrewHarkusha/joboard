@@ -13,6 +13,8 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $em)
     {
+
+
         $jobFullTime = new Job();
         $jobFullTime->setCategory($em->merge($this->getReference('category-programming')));
         $jobFullTime->setType('full-time');
@@ -46,7 +48,29 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
         $jobPartTime->setExpiresAt(new \DateTime('+30 days'));
         $em->persist($jobFullTime);
         $em->persist($jobPartTime);
+
+        $jobExpired = new Job();
+        $jobExpired->setCategory($em->merge($this->getReference('category-programming')));
+        $jobExpired->setType('full-time');
+        $jobExpired->setCompany('DevAcademy');
+        $jobExpired->setLogo('logo.gif');
+        $jobExpired->setUrl('http://www.devacademy.ru/');
+        $jobExpired->setPosition('Web Developer Expired');
+        $jobExpired->setLocation('Moscow, Rissia');
+        $jobExpired->setDescription('Lorem ipsum dolor sit amet, consectetur adipisicing elit.');
+        $jobExpired->setHowToApply('Send your resume to lorem.ipsum [at] dolor.sit');
+        $jobExpired->setIsPublic(true);
+        $jobExpired->setIsActivated(true);
+        $jobExpired->setToken('job_expired');
+        $jobExpired->setEmail('job@example.com');
+        $jobExpired->setCreatedAt(new \DateTime('2005-12-01'));
+
+        $em->persist($jobExpired);
+        
         $em->flush();
+
+
+
     }
 
     public function getOrder()
