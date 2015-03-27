@@ -508,4 +508,12 @@ class Job
     {
         return Joborad::slugify($this->getLocation());
     }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setExpiresAtValue()
+    {
+        // Add your code here
+    }
 }
