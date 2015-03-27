@@ -66,7 +66,7 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
         $jobExpired->setCreatedAt(new \DateTime('2005-12-01'));
 
         $em->persist($jobExpired);
-        
+
         $em->flush();
 
 
