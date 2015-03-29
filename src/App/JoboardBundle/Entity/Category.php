@@ -3,6 +3,7 @@
 namespace App\JoboardBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\JoboardBundle\Utils\Joboard as Joboard;
 
 /**
  * Category
@@ -11,6 +12,15 @@ class Category
 {
 
     private $activeJobs;
+
+    private $moreJobs;
+
+    /**
+     * @var string
+     */
+    private $slug;
+
+
     /**
      * @var integer
      */
@@ -152,5 +162,46 @@ class Category
     public function getActiveJobs()
     {
         return $this->activeJobs;
+    }
+
+    public function setMoreJobs($jobs)
+    {
+        $this->moreJobs = $jobs >=  0 ? $jobs : 0;
+    }
+
+    public function getMoreJobs()
+    {
+        return $this->moreJobs;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setSlugValue()
+    {
+        $this->slug = Joboard::slugify($this->getName());
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Category
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return Joboard::slugify($this->getName());
     }
 }

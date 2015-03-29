@@ -2,6 +2,14 @@ app_joboard_app_job:
     resource: "@AppJoboardBundle/Resources/config/routing/job.yml"
     prefix:   /job
 
+AppJoboardBundle_category:
+    pattern:   /category/{slug}/
+    defaults: { _controller: AppJoboardBundle:Category:show }
+
+AppJoboardBundle_category_page:
+    pattern: /category/{slug}/{page}
+    defaults: { _controller: AppJoboardBundle:Category:show, page: 1 }
+
 app_joboard_homepage:
     path:     /hello/{name}
     defaults: { _controller: AppJoboardBundle:Default:index }
@@ -9,3 +17,8 @@ app_joboard_homepage:
 app_joboard_homepage:
     pattern:  /
     defaults: { _controller: AppJoboardBundle:Job:index }
+
+app_joboard_test:
+    pattern:  /test/
+    defaults: { _controller: AppJoboardBundle:Default:test }
+
