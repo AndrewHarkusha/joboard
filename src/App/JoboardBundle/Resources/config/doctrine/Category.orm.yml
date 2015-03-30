@@ -19,3 +19,6 @@ App\JoboardBundle\Entity\Category:
         affiliates:
             targetEntity: Affiliate
             mappedBy: categories
+    lifecycleCallbacks:
+        prePersist: [ setSlugValue ]
+        preUpdate: [ setSlugValue ]

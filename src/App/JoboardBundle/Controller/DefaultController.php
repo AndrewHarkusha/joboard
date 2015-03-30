@@ -10,4 +10,9 @@ class DefaultController extends Controller
     {
         return $this->render('AppJoboardBundle:Default:index.html.twig', array('name' => $name));
     }
+
+    public function testAction($name = 'test')
+    {
+        return $this->render('AppJoboardBundle:Default:index.html.twig', array('name' => $name));
+    }
 }
