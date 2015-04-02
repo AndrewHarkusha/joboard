@@ -20,7 +20,6 @@ class Category
      */
     private $slug;
 
-
     /**
      * @var integer
      */
@@ -202,6 +201,6 @@ class Category
      */
     public function getSlug()
     {
-        return Joboard::slugify($this->getName());
+        return $this->slug;
     }
 }
