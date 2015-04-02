@@ -14,13 +14,13 @@
                         <a href="">Feed</a>
                     </div>
 
-                    <h1><a href="{{ path('AppJoboardBundle_category', {'slug': category.slug}) }}">{{ category.name }}</a></h1>
+                    <h1><a href="{{ path('AppJoboardBundle_category', {'slug': category.name}) }}">{{ category.name }}</a></h1>
 
                 </div>
                 {{ include ('AppJoboardBundle:Job:list.html.twig', {'jobs': category.activejobs}) }}
                 {% if category.morejobs %}
                     <div class="more-jobs text-right">
-                        и <a href="{{ path('AppJoboardBundle_category', {'slug': category.slug}) }}">{{ category.morejobs }}</a>
+                        и <a href="{{ path('AppJoboardBundle_category', {'slug': category.name}) }}">{{ category.morejobs }}</a>
                         ещё вакансии...
                     </div>
                 {% endif %}
