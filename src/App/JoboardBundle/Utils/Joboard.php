@@ -8,6 +8,9 @@ class Joboard
 {
     static public function slugify($text)
     {
+        if (empty($text)) {
+            return 'n-a';
+        }
         // Замена пробелов на тире
         $text = preg_replace('/ +/', '-', $text);
         // Приведение текста к нижнему регистру
