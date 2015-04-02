@@ -103,6 +103,19 @@ class JobRepositoryTest extends WebTestCase
             // Проверят количество активных вакансий в категории на соотвествие
             // количеству активных вакансий в базе
             $this->assertEquals($jobsDb, count($jobs_rep));
+
+            // Если в категории хотя бы 3 активные вакансии, то также проверяем параметры $max и $offset
+            if($jobsDb > 2 ) {
+                $jobsRep = $this->em->getRepository('AppJoboardBundle:Job')->getActiveJobs($category->getId(), 2);
+
+                // Этот тест проверяем, что действительно было выбрано только 2 активных вакансии
+                $this->assertEquals(2, count($jobsRep));
+
+                $jobsRep = $this->em->getRepository('AppJoboardBundle:Job')->getActiveJobs($category->getId(), 2, 1);
+
+                // Мы установили лимит на 2 результата, и смещение со второй вакансии
+                $this->assertEquals(2, count($jobsRep));
+            }
         }
     }
 
@@ -127,6 +140,8 @@ class JobRepositoryTest extends WebTestCase
         $jobRep = $this->em->getRepository('AppJoboardBundle:Job')->getActiveJob($jobExpired->getId());
         // Если вакансия завершена, то метод getActiveJob() должен вернуть значение null
         $this->assertNull($jobRep);
+
+
     }
 
     protected function tearDown()
