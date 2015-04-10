@@ -1,7 +1,5 @@
 <?php
 
-# src/App/JoboardBundle/Tests/Controller/CategoryControllerTest.php
-
 namespace App\JoboardBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -72,8 +70,59 @@ class CategoryControllerTest extends WebTestCase
     public function testShow()
     {
         $client = static::createClient();
-        $client->request('GET', '/category/index');
-        $this->assertEquals('App\JoboardBundle\Controller\CategoryController::showAction', $client->getRequest()->attributes->get('_controller'));
-        $this->assertTrue(200 === $client->getResponse()->getStatusCode());
+        $kernel = static::createKernel();
+        $kernel->boot();
+
+        // получаем параметры из конфига app/config.yml
+        $maxJobsOnCategory = $kernel->getContainer()->getParameter('max_jobs_on_category');
+        $maxJobsOnHomepage = $kernel->getContainer()->getParameter('max_jobs_on_homepage');
+
+        $categories = $this->em->getRepository('AppJoboardBundle:Category')->getWithJobs();
+
+        // Категории на домашней странице должны быть кликабельны
+        foreach($categories as $category) {
+            $crawler = $client->request('GET', '/job/');
+
+            $link = $crawler->selectLink($category->getName())->link();
+            $crawler = $client->click($link);
+
+            $this->assertEquals('App\JoboardBundle\Controller\CategoryController::showAction', $client->getRequest()->attributes->get('_controller'));
+            $this->assertEquals($category->getSlug(), $client->getRequest()->attributes->get('slug'));
+
+            $jobsNo = $this->em->getRepository('AppJoboardBundle:Job')->countActiveJobs($category->getId());
+
+            // категории в которых вакансий больше чем $maxJobsOnHomepage должны иметь ссылку "Ещё"
+            if ($jobsNo > $maxJobsOnHomepage) {
+                $crawler = $client->request('GET', '/job/');
+                $link = $crawler->filter(".category-" . $category->getId() . " .more-jobs a")->link();
+                $crawler = $client->click($link);
+
+                $this->assertEquals('App\JoboardBundle\Controller\CategoryController::showAction', $client->getRequest()->attributes->get('_controller'));
+                $this->assertEquals($category->getSlug(), $client->getRequest()->attributes->get('slug'));
+            }
+
+            $pages = ceil($jobsNo/$maxJobsOnCategory);
+
+            // только $maxJobsOnCategory вакансий
+            $this->assertTrue($crawler->filter('.jobs tr')->count() <= $maxJobsOnCategory);
+            $this->assertRegExp("#" . $jobsNo . " вакансии#iu", $crawler->filter('.pagination_desc')->text());
+
+            if ($pages > 1) {
+                $this->assertRegExp("#страница 1/" . $pages . "#iu", $crawler->filter('.pagination_desc')->text());
+
+                for ($i = 2; $i <= $pages; $i++) {
+                    $link = $crawler->selectLink($i)->link();
+                    $crawler = $client->click($link);
+
+                    $this->assertEquals('App\JoboardBundle\Controller\CategoryController::showAction', $client->getRequest()->attributes->get('_controller'));
+                    $this->assertEquals($i, $client->getRequest()->attributes->get('page'));
+                    $this->assertTrue($crawler->filter('.jobs tr')->count() <= $maxJobsOnCategory);
+                    if($jobsNo >1) {
+                        $this->assertRegExp("#" . $jobsNo . " вакансии#iu", $crawler->filter('.pagination_desc')->text());
+                    }
+                    $this->assertRegExp("#страница " . $i . "/" . $pages . "#iu", $crawler->filter('.pagination_desc')->text());
+                }
+            }
+        }
     }
 }
