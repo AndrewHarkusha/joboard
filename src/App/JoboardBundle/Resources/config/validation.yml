@@ -1,5 +1,8 @@
 App\JoboardBundle\Entity\Job:
     properties:
+        type:
+            - NotBlank: ~
+            - Choice: { callback: getTypeValues }
         email:
             - NotBlank: ~
             - Email: ~
