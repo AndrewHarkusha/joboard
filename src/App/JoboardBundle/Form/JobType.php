@@ -1,5 +1,7 @@
 <?php
 
+# src/App/JoboardBundle/Form/JobType.php
+
 namespace App\JoboardBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -17,23 +19,21 @@ class JobType extends AbstractType
         $builder
             ->add('type')
             ->add('company')
-            ->add('logo')
+            ->add('logo', null, ['label' => 'Лого компании'])
             ->add('url')
             ->add('position')
             ->add('location')
             ->add('description')
-            ->add('how_to_apply')
+            ->add('how_to_apply', null, ['label' => 'Как соискатель может подать свое резюме?'])
             ->add('token')
-            ->add('is_public')
-            ->add('is_activated')
+            ->add('is_public', null, ['label' => 'Публичная?'])
             ->add('email')
-            ->add('expires_at')
-            ->add('created_at')
-            ->add('updated_at')
             ->add('category')
         ;
     }
-    
+
+
+
     /**
      * @param OptionsResolverInterface $resolver
      */
