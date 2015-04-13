@@ -17,10 +17,22 @@ class JobType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type', 'choice', [
-                'choices'  => Job::getTypes(),
-                'expanded' => true
-            ])
+            ->add('type')
+            ->add('company')
+            ->add('logo', null, ['label' => 'Лого компании'])
+            ->add('url')
+            ->add('position')
+            ->add('location')
+            ->add('description')
+            ->add('how_to_apply', null, ['label' => 'Как соискатель может подать свое резюме?'])
+            ->add('token')
+            ->add('is_public', null, ['label' => 'Публичная?'])
+            ->add('email')
+            ->add('category')
+        ;
+    }
+
+
 
     /**
      * @param OptionsResolverInterface $resolver
