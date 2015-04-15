@@ -98,7 +98,11 @@ class JobController extends Controller
     public function newAction()
     {
         $entity = new Job();
-        $form   = $this->createCreateForm($entity);
+        $entity->setType('full-time');
+        $form = $this->createForm(new JobType(), $entity, [
+        '    action' => $this->generateUrl('app_job_create'),
+            'method' => 'POST',
+        ]);
 
         return $this->render('AppJoboardBundle:Job:new.html.twig', array(
             'entity' => $entity,
