@@ -19,7 +19,7 @@ class JobType extends AbstractType
         $builder
             ->add('type')
             ->add('company')
-            ->add('logo', null, ['label' => 'Лого компании'])
+            ->add('file', 'file', ['label' => 'Лого компании', 'required' => false])
             ->add('url')
             ->add('position')
             ->add('location')

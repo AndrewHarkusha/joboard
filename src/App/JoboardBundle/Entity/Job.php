@@ -30,6 +30,8 @@ class Job
      */
     private $logo;
 
+    public $file;
+
     /**
      * @var string
      */

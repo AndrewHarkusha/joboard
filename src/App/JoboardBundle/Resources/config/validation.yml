@@ -22,3 +22,5 @@ App\JoboardBundle\Entity\Job:
             - Email: ~
         url:
             - Url: ~
+        file:
+            - Image: ~
