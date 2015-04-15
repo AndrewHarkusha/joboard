@@ -13,8 +13,6 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $em)
     {
-
-
         $jobFullTime = new Job();
         $jobFullTime->setCategory($em->merge($this->getReference('category-programming')));
         $jobFullTime->setType('full-time');
@@ -67,8 +65,7 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
 
         $em->persist($jobExpired);
 
-        for($i = 100; $i <= 130; $i++)
-        {
+        for ($i = 100; $i <= 130; $i++) {
             $job = new Job();
             $job->setCategory($em->merge($this->getReference('category-programming')));
             $job->setType('full-time');
@@ -86,9 +83,6 @@ class LoadJobData extends AbstractFixture implements OrderedFixtureInterface
         }
 
         $em->flush();
-
-
-
     }
 
     public function getOrder()

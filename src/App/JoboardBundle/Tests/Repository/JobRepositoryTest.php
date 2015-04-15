@@ -74,7 +74,7 @@ class JobRepositoryTest extends WebTestCase
         $query = $this->em->createQuery('SELECT c FROM AppJoboardBundle:Category c');
         $categories = $query->getResult();
 
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $query = $this->em->createQuery('SELECT COUNT(j.id) FROM AppJoboardBundle:Job j
                                              WHERE j.category = :category AND j.expires_at > :date');
             $query->setParameter('category', $category->getId());
@@ -105,7 +105,7 @@ class JobRepositoryTest extends WebTestCase
             $this->assertEquals($jobsDb, count($jobs_rep));
 
             // Если в категории хотя бы 3 активные вакансии, то также проверяем параметры $max и $offset
-            if($jobsDb > 2 ) {
+            if ($jobsDb > 2) {
                 $jobsRep = $this->em->getRepository('AppJoboardBundle:Job')->getActiveJobs($category->getId(), 2);
 
                 // Этот тест проверяем, что действительно было выбрано только 2 активных вакансии
@@ -140,8 +140,6 @@ class JobRepositoryTest extends WebTestCase
         $jobRep = $this->em->getRepository('AppJoboardBundle:Job')->getActiveJob($jobExpired->getId());
         // Если вакансия завершена, то метод getActiveJob() должен вернуть значение null
         $this->assertNull($jobRep);
-
-
     }
 
     protected function tearDown()

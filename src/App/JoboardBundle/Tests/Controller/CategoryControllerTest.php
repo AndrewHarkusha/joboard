@@ -80,7 +80,7 @@ class CategoryControllerTest extends WebTestCase
         $categories = $this->em->getRepository('AppJoboardBundle:Category')->getWithJobs();
 
         // Категории на домашней странице должны быть кликабельны
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $crawler = $client->request('GET', '/job/');
 
             $link = $crawler->selectLink($category->getName())->link();
@@ -117,7 +117,7 @@ class CategoryControllerTest extends WebTestCase
                     $this->assertEquals('App\JoboardBundle\Controller\CategoryController::showAction', $client->getRequest()->attributes->get('_controller'));
                     $this->assertEquals($i, $client->getRequest()->attributes->get('page'));
                     $this->assertTrue($crawler->filter('.jobs tr')->count() <= $maxJobsOnCategory);
-                    if($jobsNo >1) {
+                    if ($jobsNo >1) {
                         $this->assertRegExp("#" . $jobsNo . " вакансии#iu", $crawler->filter('.pagination_desc')->text());
                     }
                     $this->assertRegExp("#страница " . $i . "/" . $pages . "#iu", $crawler->filter('.pagination_desc')->text());

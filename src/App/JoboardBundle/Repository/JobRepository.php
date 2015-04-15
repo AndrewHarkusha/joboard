@@ -21,15 +21,15 @@ class JobRepository extends EntityRepository
             ->setParameter('date', date('Y-m-d H:i:s', time()))
             ->orderBy('j.expires_at', 'DESC');
 
-        if($max) {
+        if ($max) {
             $qb->setMaxResults($max);
         }
 
-        if($offset) {
+        if ($offset) {
             $qb->setFirstResult($offset);
         }
 
-        if($categoryId) {
+        if ($categoryId) {
             $qb->andWhere('j.category = :category_id')
                 ->setParameter('category_id', $categoryId);
         }
@@ -65,8 +65,7 @@ class JobRepository extends EntityRepository
             ->where('j.expires_at > :date')
             ->setParameter('date', date('Y-m-d H:i:s', time()));
 
-        if($categoryId)
-        {
+        if ($categoryId) {
             $qb->andWhere('j.category = :category_id')
                 ->setParameter('category_id', $categoryId);
         }

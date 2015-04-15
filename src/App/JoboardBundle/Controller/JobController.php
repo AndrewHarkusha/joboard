@@ -4,7 +4,6 @@ namespace App\JoboardBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use App\JoboardBundle\Entity\Job;
 use App\JoboardBundle\Form\JobType;
 
@@ -25,7 +24,7 @@ class JobController extends Controller
 
         $categories = $em->getRepository('AppJoboardBundle:Category')->getWithJobs();
 
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $category->setActiveJobs($em->getRepository('AppJoboardBundle:Job')->getActiveJobs(
                     $category->getId(),
                     $this->container->getParameter('max_jobs_on_homepage'))
