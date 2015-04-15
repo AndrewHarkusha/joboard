@@ -49,16 +49,12 @@ class JobController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity  = new Job();
+        $entity = new Job();
         $form = $this->createForm(new JobType(), $entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
-            $entity->file->move(__DIR__.'/../../../../web/uploads/jobs', $entity->file->getClientOriginalName());
-            $entity->setLogo($entity->file->getClientOriginalName());
-
             $em->persist($entity);
             $em->flush();
 
@@ -74,6 +70,8 @@ class JobController extends Controller
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
+    }
+));
     }
 
     /**
