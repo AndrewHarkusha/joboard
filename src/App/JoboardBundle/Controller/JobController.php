@@ -71,8 +71,7 @@ class JobController extends Controller
             'form'   => $form->createView(),
         ));
     }
-));
-    }
+
 
     /**
      * Creates a form to create a Job entity.
@@ -98,9 +97,19 @@ class JobController extends Controller
     public function newAction()
     {
         $entity = new Job();
+        $form   = $this->createCreateForm($entity);
+
+        return $this->render('AppJoboardBundle:Job:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+    public function newAction()
+    {
+        $entity = new Job();
         $entity->setType('full-time');
         $form = $this->createForm(new JobType(), $entity, [
-        '    action' => $this->generateUrl('app_job_create'),
+            '    action' => $this->generateUrl('app_job_create'),
             'method' => 'POST',
         ]);
 
@@ -173,6 +182,7 @@ class JobController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Job entity.
      *
