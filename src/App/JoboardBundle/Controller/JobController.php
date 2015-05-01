@@ -4,7 +4,6 @@ namespace App\JoboardBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use App\JoboardBundle\Entity\Job;
 use App\JoboardBundle\Form\JobType;
 
@@ -25,7 +24,7 @@ class JobController extends Controller
 
         $categories = $em->getRepository('AppJoboardBundle:Category')->getWithJobs();
 
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $category->setActiveJobs($em->getRepository('AppJoboardBundle:Job')->getActiveJobs(
                     $category->getId(),
                     $this->container->getParameter('max_jobs_on_homepage'))
@@ -50,7 +49,7 @@ class JobController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity  = new Job();
+        $entity = new Job();
         $form = $this->createForm(new JobType(), $entity);
         $form->handleRequest($request);
 
@@ -73,6 +72,7 @@ class JobController extends Controller
         ));
     }
 
+
     /**
      * Creates a form to create a Job entity.
      *
@@ -87,8 +87,6 @@ class JobController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
         return $form;
     }
 
@@ -100,6 +98,20 @@ class JobController extends Controller
     {
         $entity = new Job();
         $form   = $this->createCreateForm($entity);
+
+        return $this->render('AppJoboardBundle:Job:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+    public function newAction()
+    {
+        $entity = new Job();
+        $entity->setType('full-time');
+        $form = $this->createForm(new JobType(), $entity, [
+            '    action' => $this->generateUrl('app_job_create'),
+            'method' => 'POST',
+        ]);
 
         return $this->render('AppJoboardBundle:Job:new.html.twig', array(
             'entity' => $entity,
@@ -168,10 +180,9 @@ class JobController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
         return $form;
     }
+
     /**
      * Edits an existing Job entity.
      *

@@ -17,4 +17,3 @@ app_joboard_homepage:
 app_joboard_test:
     pattern:  /test/
     defaults: { _controller: AppJoboardBundle:Default:test }
-

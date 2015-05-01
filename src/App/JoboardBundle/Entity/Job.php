@@ -30,6 +30,8 @@ class Job
      */
     private $logo;
 
+    public $file;
+
     /**
      * @var string
      */
@@ -99,7 +101,7 @@ class Job
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -122,7 +124,7 @@ class Job
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -145,7 +147,7 @@ class Job
     /**
      * Get company
      *
-     * @return string 
+     * @return string
      */
     public function getCompany()
     {
@@ -168,7 +170,7 @@ class Job
     /**
      * Get logo
      *
-     * @return string 
+     * @return string
      */
     public function getLogo()
     {
@@ -191,7 +193,7 @@ class Job
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -214,7 +216,7 @@ class Job
     /**
      * Get position
      *
-     * @return string 
+     * @return string
      */
     public function getPosition()
     {
@@ -237,7 +239,7 @@ class Job
     /**
      * Get location
      *
-     * @return string 
+     * @return string
      */
     public function getLocation()
     {
@@ -260,7 +262,7 @@ class Job
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -283,7 +285,7 @@ class Job
     /**
      * Get how_to_apply
      *
-     * @return string 
+     * @return string
      */
     public function getHowToApply()
     {
@@ -306,7 +308,7 @@ class Job
     /**
      * Get token
      *
-     * @return string 
+     * @return string
      */
     public function getToken()
     {
@@ -329,7 +331,7 @@ class Job
     /**
      * Get is_public
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsPublic()
     {
@@ -352,7 +354,7 @@ class Job
     /**
      * Get is_activated
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActivated()
     {
@@ -375,7 +377,7 @@ class Job
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -398,7 +400,7 @@ class Job
     /**
      * Get expires_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpiresAt()
     {
@@ -421,7 +423,7 @@ class Job
     /**
      * Get created_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -444,7 +446,7 @@ class Job
     /**
      * Get updated_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -467,7 +469,7 @@ class Job
     /**
      * Get category
      *
-     * @return \App\JoboardBundle\Entity\Category 
+     * @return \App\JoboardBundle\Entity\Category
      */
     public function getCategory()
     {
@@ -479,8 +481,7 @@ class Job
      */
     public function setCreatedAtValue()
     {
-        if(!$this->getCreatedAt())
-        {
+        if (!$this->getCreatedAt()) {
             $this->created_at = new \DateTime();
         }
     }
@@ -514,7 +515,7 @@ class Job
      */
     public function setExpiresAtValue()
     {
-        if(!$this->getExpiresAt()) {
+        if (!$this->getExpiresAt()) {
             $now = $this->getCreatedAt() ? $this->getCreatedAt()->format('U') : time();
             $this->expires_at = new \DateTime(date('Y-m-d H:i:s', $now + 86400 * 30));
         }
@@ -533,6 +534,62 @@ class Job
     {
         return array_keys(self::getTypes());
     }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/jobs';
+    }
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->logo ? null : $this->getUploadDir().'/'.$this->logo;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->logo ? null : $this->getUploadRootDir().'/'.$this->logo;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function preUpload()
+    {
+        if (null !== $this->file) {
+            // Генерируем уникальное имя для файла
+            $this->logo = uniqid().'.'.$this->file->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function upload()
+    {
+        if (null === $this->file) {
+            return;
+        }
+
+        // Перемещаем файл в наш каталог web/uploads/job
+        $this->file->move($this->getUploadRootDir(), $this->logo);
+
+        unset($this->file);
+    }
+
+    /**
+     * @ORM\PostRemove
+     */
+    public function removeUpload()
+    {
+        if ($this->logo) {
+            if ($file = $this->getAbsolutePath()) {
+                unlink($file);
+            }
+        }
+    }
 }
-
-
